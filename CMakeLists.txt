@@ -71,6 +71,7 @@ pico_enable_stdio_usb(keyboard 0)
 target_link_libraries(keyboard
         tinyusb_device
         tinyusb_board
+        btstack
         pico_stdlib)
 
 
@@ -79,7 +80,7 @@ target_include_directories(keyboard PRIVATE
 ${CMAKE_CURRENT_LIST_DIR}
 
 # hals
-${CMAKE_CURRENT_LIST_DIR}/keyboard_helper/hals
+${CMAKE_CURRENT_LIST_DIR}/keyboard_helper/hals/
 ${CMAKE_CURRENT_LIST_DIR}/keyboard_helper/hals/usb_interface/tusb
 
 # keyboard profiles

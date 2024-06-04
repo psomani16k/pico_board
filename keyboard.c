@@ -41,6 +41,10 @@
  */
 
 /*------------- MAIN -------------*/
+
+void usb_mode();
+void bl_mode();
+
 int main(void)
 {
     stdio_init_all();
@@ -49,7 +53,13 @@ int main(void)
         printf("Wi-Fi init failed");
         return -1;
     }
+    usb_mode();
 
+    return 0;
+}
+
+void usb_mode()
+{
     usb_init();
 
     while (1)
@@ -59,6 +69,4 @@ int main(void)
 
         hid_task();
     }
-
-    return 0;
 }
