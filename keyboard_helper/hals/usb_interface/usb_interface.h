@@ -190,11 +190,5 @@ void hid_task(void)
                 has_keyboard_key = false;
             }
         }
-
-        // mouse interface
-        if (tud_hid_n_ready(ITF_NUM_MOUSE))
-        {
-            return;
-        }
     }
 }
