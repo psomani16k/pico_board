@@ -48,6 +48,16 @@ void tud_hid_set_protocol_cb(uint8_t instance, uint8_t protocol)
 }
 
 //--------------------------------------------------------------------+
+// Initiating USB Device
+//--------------------------------------------------------------------+
+
+void usb_init()
+{
+    // init device stack on configured roothub port
+    tud_init(BOARD_TUD_RHPORT);
+}
+
+//--------------------------------------------------------------------+
 // Device callbacks
 //--------------------------------------------------------------------+
 
@@ -152,6 +162,12 @@ typedef struct TU_ATTR_PACKED
 
 void send_report_protocol_report(uint8_t modifiers, uint8_t *keycodes, uint8_t size)
 {
+
+    if (tud_suspended())
+    {
+        tud_remote_wakeup();
+        return;
+    }
     hid_keyboard_report_protocol_report report;
     report.reserved = 0;
     report.modifier = modifiers;

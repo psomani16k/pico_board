@@ -40,8 +40,6 @@
  * - 2500 ms : device is suspended
  */
 
-void hid_task(void);
-
 /*------------- MAIN -------------*/
 int main(void)
 {
@@ -52,8 +50,7 @@ int main(void)
         return -1;
     }
 
-    // init device stack on configured roothub port
-    tud_init(BOARD_TUD_RHPORT);
+    usb_init();
 
     while (1)
     {
@@ -65,4 +62,3 @@ int main(void)
 
     return 0;
 }
-
