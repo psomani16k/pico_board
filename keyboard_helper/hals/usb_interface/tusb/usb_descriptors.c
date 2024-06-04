@@ -107,7 +107,7 @@ uint8_t const *tud_descriptor_device_cb(void)
       HID_USAGE_MAX_N  ( 255, 2                              )     ,\
       HID_LOGICAL_MIN  ( 0                                   )     ,\
       HID_LOGICAL_MAX_N( 255, 2                              )     ,\
-      HID_REPORT_COUNT ( 6                                   )     ,\
+      HID_REPORT_COUNT ( 10                                  )     ,\
       HID_REPORT_SIZE  ( 8                                   )     ,\
       HID_INPUT        ( HID_DATA | HID_ARRAY | HID_ABSOLUTE )     ,\
   HID_COLLECTION_END \

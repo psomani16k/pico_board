@@ -143,6 +143,32 @@ void tud_hid_report_complete_cb(uint8_t instance, uint8_t const *report, uint16_
 // USB HID
 //--------------------------------------------------------------------+
 
+typedef struct TU_ATTR_PACKED
+{
+    uint8_t modifier;    /**< Keyboard modifier (KEYBOARD_MODIFIER_* masks). */
+    uint8_t reserved;    /**< Reserved for OEM use, always set to 0. */
+    uint8_t keycode[10]; /**< Key codes of the currently pressed keys. */
+} hid_keyboard_report_protocol_report;
+
+void send_report_protocol_report(uint8_t modifiers, uint8_t *keycodes, uint8_t size)
+{
+    hid_keyboard_report_protocol_report report;
+    report.reserved = 0;
+    report.modifier = modifiers;
+
+    uint8_t keys[10] = {HID_KEY_NONE};
+    for (uint8_t i = 0; i < size; i++)
+    {
+        if (i == 10)
+        {
+            break;
+        }
+        keys[i] = keycodes[i];
+    }
+    memcpy(report.keycode, keys, 10);
+    tud_hid_n_report(ITF_NUM_KEYBOARD, 0, &report, sizeof(report));
+}
+
 // Every 10ms, we will sent 1 report for each HID profile (keyboard, mouse etc ..)
 // tud_hid_report_complete_cb() is used to send the next report after previous one is complete
 void hid_task(void)
@@ -169,25 +195,25 @@ void hid_task(void)
         if (tud_hid_n_ready(ITF_NUM_KEYBOARD))
         {
             // used to avoid send multiple consecutive zero report for keyboard
-            static bool has_keyboard_key = false;
 
             uint8_t const report_id = 0;
             uint8_t const modifier = 0;
 
             if (btn)
             {
-                uint8_t keycode[6] = {0};
-                keycode[0] = HID_KEY_A;
-
-                tud_hid_n_keyboard_report(ITF_NUM_KEYBOARD, report_id, modifier, keycode);
-                has_keyboard_key = true;
-            }
-            else
-            {
-                // send empty key report if previously has key pressed
-                if (has_keyboard_key)
-                    tud_hid_n_keyboard_report(ITF_NUM_KEYBOARD, report_id, modifier, NULL);
-                has_keyboard_key = false;
+                uint8_t keycode[10] = {
+                    HID_KEY_0,
+                    HID_KEY_1,
+                    HID_KEY_2,
+                    HID_KEY_3,
+                    HID_KEY_4,
+                    HID_KEY_5,
+                    HID_KEY_6,
+                    HID_KEY_7,
+                    HID_KEY_8,
+                    HID_KEY_9,
+                };
+                send_report_protocol_report(modifier, keycode, sizeof(keycode));
             }
         }
     }
